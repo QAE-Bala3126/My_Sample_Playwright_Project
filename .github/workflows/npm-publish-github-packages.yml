@@ -1,38 +1,50 @@
-# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
-# For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
-
-name: Node.js Package
+name: CI - Playwright tests
 
 on:
-  release:
-    types: [created]
+  push:
+    branches: [ main, "feature/**" ]
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
-  build:
+  test:
+    name: Playwright tests
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - run: npm ci
-      - run: npm test
 
-  publish-gpr:
-    if: github.event_name == 'release'
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
+    strategy:
+      matrix:
+        node-version: [18.x]
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
-          registry-url: https://npm.pkg.github.com/
-      - run: npm ci
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run tests
+        # generate both junit and html reports
+        run: npx playwright test --reporter=junit,html
+        # if you use a custom test script: npm run test:ci
+
+      - name: Upload Playwright HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+
+      - name: Upload junit results
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-results
+          path: test-results/
