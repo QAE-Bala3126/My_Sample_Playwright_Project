@@ -1,0 +1,15 @@
+{
+  "name": "playwright-js-project",
+  "version": "1.0.0",
+  "description": "A Playwright end-to-end testing project using JavaScript.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "allure-playwright": "^3.4.3"
+  }
+}
