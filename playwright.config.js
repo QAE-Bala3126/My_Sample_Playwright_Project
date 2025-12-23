@@ -5,7 +5,7 @@ const config = {
   timeout: 30000,
   retries: 0,
   use: {
-    headless: false,
+    headless: true,
     viewport: { width: 1920, height: 1080 },
     actionTimeout: 0,
     ignoreHTTPSErrors: true,
