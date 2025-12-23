@@ -35,6 +35,8 @@ jobs:
       - name: Run tests
         # generate both junit and html reports
         run: xvfb-run --auto-servernum -- npx playwright test --headless --reporter=junit,html
+        env:
+            PLAYWRIGHT_HEADLESS: 1
         # if you use a custom test script: npm run test:ci
 
       - name: Upload Playwright HTML report
