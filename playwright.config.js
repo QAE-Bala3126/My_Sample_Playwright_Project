@@ -6,7 +6,7 @@ const config = {
   retries: 0,
   workers: 3,
   use: {
-    headless: false,
+    headless: true,
     viewport: { width: 1920, height: 1080 },
     actionTimeout: 0,
     ignoreHTTPSErrors: true,
