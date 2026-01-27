@@ -1,6 +1,5 @@
-const { test, expect } = require('@playwright/test');
-const LoginPage = require('../pages/login_pom');
-const HomePage = require('../pages/homepage_pom');
+const { test } = require('@playwright/test');
+const DataDrivenTest = require('../pages/dataDrivenTest');
 
 test.describe('Data-driven login examples', () => {
   const testData = [
@@ -26,18 +25,14 @@ test.describe('Data-driven login examples', () => {
 
   for (const data of testData) {
     test(`Login (DDT): ${data.title}`, async ({ page }) => {
-      await page.goto('https://freelance-learn-automation.vercel.app/login');
-
-      const loginPage = new LoginPage(page);
-      await loginPage.login(data.email, data.password);
-
-      const homePage = new HomePage(page);
+      const ddt = new DataDrivenTest(page);
+      await ddt.gotoLogin();
+      await ddt.login(data.email, data.password);
 
       if (data.shouldLogin) {
-        await expect(page.locator(homePage.menu)).toBeVisible();
+        await ddt.expectLoginSuccess();
       } else {
-        await expect(page.locator(loginPage.signInButton)).toBeVisible();
-        await expect(page.locator(homePage.menu)).toHaveCount(0);
+        await ddt.expectLoginFailure();
       }
     });
   }
