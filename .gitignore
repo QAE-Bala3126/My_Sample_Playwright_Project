@@ -4,6 +4,8 @@ node_modules/
 # Playwright test results
 playwright-report/
 test-results/
+my-report/
+test-results.json
 
 # Allure results
 allure-results/

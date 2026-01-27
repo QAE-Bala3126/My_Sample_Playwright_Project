@@ -8,13 +8,20 @@ class AddToCart{
     }
     
     async addToCartOfApplication(){
+        // `page.click()` returns a Promise; `await` waits until the click + auto-waits complete.
         await this.page.click(this.javaForTester);
+        // `page.pause()` returns a Promise; it resolves when you resume from the inspector.
         await this.page.pause();
         
     }
     async confirmAddToCart(){
+        // `expect(...).toBeVisible()` is async; it returns a Promise that resolves when the assertion passes.
         await expect(this.page.locator(this.confirmAddToCartBtn)).toBeVisible();
+
+        // `page.pause()` returns a Promise; it resolves when you resume from the inspector.
         await this.page.pause();
+
+        // `browser.close()` returns a Promise; it resolves once the browser is fully closed.
         await this.page.context().browser().close();
 }
 }

@@ -6,18 +6,19 @@ const config = {
   retries: 0,
   workers: 3,
   use: {
-    headless: true,
+    headless: false,
     viewport: { width: 1920, height: 1080 },
     actionTimeout: 0,
     ignoreHTTPSErrors: true,
     video: 'retain-on-failure',
     trace: 'on-first-retry',
   },
-  // ...existing code...
-reporter: [
-  ['allure-playwright']
-],
-// ...existing code...
+  reporter: [
+    ['list'],
+    ['html', { outputFolder: 'my-report', open: 'on-failure' }],
+    ['json', { outputFile: 'test-results.json' }],
+    ['allure-playwright'],
+  ],
 };
 
 module.exports = config;
